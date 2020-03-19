@@ -12,7 +12,7 @@ const generateLine = len => new Array(len).fill().map(generateCell);
 const generateMatrix = (n, m) => new Array(n).fill().map(() => generateLine(m));
 
 const getNextIteration = field => {
-    new_field = [];
+    let new_field = [];
 
     for (let i = 0; i < field.length; i++) {
         line = field[i].map((value, j) => {
