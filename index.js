@@ -1,9 +1,12 @@
 const fs = require("fs");
 const path = require("path");
+const readline = require('readline');
 
 const generateCell = () => Math.random() > 0.5 ? 0 : 1;
 
 const generateLine = len => new Array(len).fill().map(generateCell);
+
+const generateMatrix = (n, m) => new Array(n).fill().map(() => generateLine(m));
 
 const getNextIteration = field => {
     new_field = [];
@@ -42,8 +45,23 @@ const frame = field => {
 };
 
 const init = () => {
-    let field = new Array(5).fill().map(() => generateLine(5));
-    frame(field);
+    let field = [];
+
+    if (process.argv.length > 2) {
+        let readStream = fs.createReadStream(path.join(__dirname, process.argv[2]));
+        let rl = readline.createInterface(readStream);
+
+        rl.on("line", line => { 
+            field.push(line.split("").map(c => c === "*" ? 1 : 0));
+        }).on("close", () => {
+            frame(field);
+        });
+    } else {
+        let n = Math.ceil(Math.random() * 10) + 1;
+        let m = Math.ceil(Math.random() * 10) + 1;
+        field = generateMatrix(n, m);
+        frame(field);
+    }
 };
 
 init();
